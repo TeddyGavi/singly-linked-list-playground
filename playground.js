@@ -252,11 +252,6 @@ console.log("This is the size of the list", linkedList.getSize());
 console.log(linkedList.findByData(-1));
 console.log(linkedList.findByData(99));
 
-const testArray = Array.from(
-  { length: 12500000 },
-  (_, i) => i + Math.random() * 1000000
-);
-
 // const runTimeTest = (...args) => {
 //   for (let i = 0; i < args.length; i++) {
 //     console.time(args[i].name);
@@ -266,17 +261,23 @@ const testArray = Array.from(
 // };
 
 // A whole Swack of tests
+const testArray = Array.from(
+  { length: 12500000 },
+  (_, i) => i + Math.random() * 1000000
+);
 
-const ITERATION_LENGTH = 10;
+const ITERATION_LENGTH = 1000;
 
 // ARRAY SUMS
 let popMethodResult = 0;
-let findIndexResultArray = 0;
+let findIndexArrayResult = 0;
 let pushIntoArrayResult = 0;
+let unshiftIntoArrayResult = 0;
 // LINKED LIST SUMS
 let llRemoveMethodResult = 0;
 let llFindByIndexResult = 0;
 let llAppendMethodResult = 0;
+let llPrependMethodResult = 0;
 
 // console.log(testArray.length); to confirm the size of the array
 
@@ -287,7 +288,7 @@ for (let i = 0; i < ITERATION_LENGTH; i++) {
   const ii = testArray[Math.random() * testArray.length - 1];
   const end = performance.now();
   const result = end - start;
-  findIndexResultArray = result;
+  findIndexArrayResult = result;
 }
 
 // REMOVE LAST ELEMENT TEST
@@ -306,6 +307,16 @@ for (i = 0; i < ITERATION_LENGTH; i++) {
   const end = performance.now();
   const result = end - start;
   pushIntoArrayResult += result;
+}
+
+// ADD ELEMENT TO START OF ARRAY TEST
+
+for (let i = 0; i < ITERATION_LENGTH; i++) {
+  const start = performance.now();
+  testArray.unshift(Math.random() * 1000000);
+  const end = performance.now();
+  const result = end - start;
+  unshiftIntoArrayResult = result;
 }
 
 // CREATE NEW LIST
@@ -342,9 +353,35 @@ for (let i = 0; i < ITERATION_LENGTH; i++) {
   llAppendMethodResult += result;
 }
 
+// PREPEND DATA
+for (let i = 0; i < ITERATION_LENGTH; i++) {
+  const start = performance.now();
+  llTest.prepend(Math.random() * 1000000);
+  const end = performance.now();
+  const result = end - start;
+  llPrependMethodResult = result;
+}
+
+const tableResult = {
+  "FIND BY INDEX ARRAY":
+    (findIndexArrayResult / ITERATION_LENGTH).toFixed(10) + " m/s",
+  "FIND BY INDEX LL":
+    (llFindByIndexResult / ITERATION_LENGTH).toFixed(10) + " m/s",
+  "ARRAY PUSH": (pushIntoArrayResult / ITERATION_LENGTH).toFixed(10) + " m/s",
+  "APPEND LL": (llAppendMethodResult / ITERATION_LENGTH).toFixed(10) + " m/s",
+  "UNSHIFT ARRAY":
+    (unshiftIntoArrayResult / ITERATION_LENGTH).toFixed(10) + " m/s",
+  "PREPEND LL": (llPrependMethodResult / ITERATION_LENGTH).toFixed(10) + " m/s",
+  "POP ARRAY": (popMethodResult / ITERATION_LENGTH).toFixed(10) + " m/s",
+  "REMOVE LAST NODE LL":
+    (llRemoveMethodResult / ITERATION_LENGTH).toFixed(10) + " m/s",
+};
+
+console.table(tableResult);
+
 console.log(
   "This is the sum from the find by index Array method",
-  findIndexResultArray
+  findIndexArrayResult
 );
 console.log(
   "This is the sum from the find by index Linked List method",
@@ -355,6 +392,15 @@ console.log("This is the sum from the push Array method", pushIntoArrayResult);
 console.log(
   "This is the sum from the append Linked List method",
   llAppendMethodResult
+);
+
+console.log(
+  "This is the result from the unshift method",
+  unshiftIntoArrayResult
+);
+console.log(
+  "This is the result from the Linked List prepend method",
+  llPrependMethodResult
 );
 
 console.log("This is the sum from the pop method", popMethodResult);
