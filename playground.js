@@ -1,4 +1,23 @@
 const { performance } = require("perf_hooks");
+const exampleLinkedList = {
+  head: {
+    data: 1,
+    next: {
+      data: 2,
+      next: {
+        data: 3,
+        next: {
+          data: 4,
+          next: {
+            data: 5,
+            next: null,
+          },
+        },
+      },
+    },
+  },
+};
+
 class LinkedNode {
   constructor(data) {
     this.data = data;
@@ -91,12 +110,12 @@ class LinkedList {
     } else {
       let current = this.head;
       while (current.next.next !== null) {
+        // stop at the second to last node
         current = current.next;
       }
       current.next = null;
       this.tail = current;
     }
-    // no more references to the node so the garbage collector will remove it
     this.size--;
     return last.data;
   }
